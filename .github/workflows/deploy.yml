@@ -3,7 +3,7 @@ name: Deploy to AWS EC2
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -28,6 +28,13 @@ jobs:
         port: 22
         source: "build/"
         target: "/var/www/html"
-
+    - name: Setup Directory & Permissions 
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<EOF
+          sudo mkdir -p /var/www/html
+          sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html
+          tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html
+          sudo chown -R www-data:www-data /var/www/html
+        EOF
     - name: Restart NGINX
       run: ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "sudo systemctl restart nginx"
