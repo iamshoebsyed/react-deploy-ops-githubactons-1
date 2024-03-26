@@ -27,6 +27,10 @@ jobs:
           port: 22
           source: ./build/
           target: /var/www/html/react
+      - name: Create Target Directory
+        run: ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{
+          secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "mkdir -p
+          /var/www/html/react"
       - name: Setup Directory & Permissions
         run: >
           ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{
@@ -35,7 +39,7 @@ jobs:
             sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
             tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html/react
             sudo chown -R www-data:www-data /var/www/html/react
-           EOF
+          EOF
       - name: Restart NGINX
         run: ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{
           secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "sudo systemctl
