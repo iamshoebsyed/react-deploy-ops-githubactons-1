@@ -29,7 +29,6 @@ jobs:
           secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<'EOF'
             sudo chmod 600 $HOME/.ssh/id_rsa
             sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
-            sudo tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html/react
             sudo chown -R www-data:www-data /var/www/html/react
           EOF
       - name: Restart NGINX
