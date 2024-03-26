@@ -29,12 +29,10 @@ jobs:
         source: "./build/"
         target: "/var/www/html/react"
     - name: Setup Directory & Permissions 
-      run: |
-        SSH_PRIVATE_KEY=$(mktemp)
-        chmod 600 "SSH_PRIVATE_KEY"
-        ssh -i StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<EOF
-          sudo chmod 600 ${{ secrets.SSH_PRIVATE_KEY }}
-          sudo chown -R  ubuntu:ubuntu /var/www/html/react
+       run: |
+        ssh -i "$HOME/.ssh/id_rsa" -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<'EOF'
+          sudo chmod 600 $HOME/.ssh/id_rsa
+          sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
           tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html/react
           sudo chown -R www-data:www-data /var/www/html/react
         EOF
