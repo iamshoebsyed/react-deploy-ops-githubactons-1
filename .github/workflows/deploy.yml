@@ -1,5 +1,5 @@
 ---
-name: Deploy to AWS EC2.
+name: Deploy to AWS EC2
 on:
   push:
     branches:
@@ -27,9 +27,9 @@ jobs:
         run: >
           ssh -i "$HOME/.ssh/id_rsa" -o StrictHostKeyChecking=no ${{
           secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<'EOF'
-            sudo chmod 600 $HOME/.ssh/id_rsa
+            sudo mkdir -p /var/www/html/react
             sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
-            sudo chown -R www-data:www-data /var/www/html/react
+            sudo chmod -R 755 /var/www/html/react
           EOF
       - name: Restart NGINX
         run: >
