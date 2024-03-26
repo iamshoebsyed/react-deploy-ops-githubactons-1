@@ -31,6 +31,7 @@ jobs:
     - name: Setup Directory & Permissions 
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<EOF
+          sudo chmod 600 ${{ secrets.SSH_PRIVATE_KEY }}
           sudo mkdir -p /var/www/html/react
           sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
           tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html/react
