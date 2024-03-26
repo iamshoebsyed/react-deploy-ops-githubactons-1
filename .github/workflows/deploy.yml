@@ -19,6 +19,11 @@ jobs:
     - name: Build React app
       run: npm run build
 
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
     - name: Transfer files to EC2 instance
       uses: appleboy/scp-action@master
       with:
@@ -28,13 +33,15 @@ jobs:
         port: 22
         source: "./build/"
         target: "/var/www/html/react"
+
     - name: Setup Directory & Permissions 
-       run: |
-        ssh -i "$HOME/.ssh/id_rsa" -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<'EOF'
+      run: |
+        ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} <<'EOF'
           sudo chmod 600 $HOME/.ssh/id_rsa
           sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
           tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html/react
           sudo chown -R www-data:www-data /var/www/html/react
-        EOF
+EOF
+
     - name: Restart NGINX
-      run: ssh -i  StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "sudo systemctl restart nginx"
+      run: ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "sudo systemctl restart nginx"
