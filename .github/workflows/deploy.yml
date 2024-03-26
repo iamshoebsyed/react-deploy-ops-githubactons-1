@@ -41,7 +41,7 @@ jobs:
           sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/react
           tar -xzf /tmp/bsHHGTYRNP.tar.gz -C /var/www/html/react
           sudo chown -R www-data:www-data /var/www/html/react
-EOF
+       EOF
 
     - name: Restart NGINX
       run: ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "sudo systemctl restart nginx"
