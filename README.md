@@ -15,7 +15,6 @@ chmod +x config.sh
 
 sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner
 
-
 ##check logs 
 
 cat /var/log/nginx/error.log
